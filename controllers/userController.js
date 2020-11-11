@@ -16,8 +16,12 @@ exports.login = function(req, res) {
     })
   }
 
-exports.logout = function () {
-    
+exports.logout = function (req, res) {
+//So this gonna find the session that have been created 
+//in MongoDB and will remove that
+    req.session.destroy(function () {
+        res.redirect('/')
+    })
 }
 
 
