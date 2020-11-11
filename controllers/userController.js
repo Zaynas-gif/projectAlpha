@@ -1,0 +1,44 @@
+const { response } = require("express")
+// '../' you can move up your folder
+const User = require('../models/User')
+
+
+//When user types in correct information username and password values 
+//1 server gonna store session data in memory
+//2 session will send instructions to the webbrowser to create cookie.
+exports.login = function(req, res) {
+    let user = new User(req.body)
+    user.login().then(function(result) {
+      req.session.user = {favColor: "blue", username: user.data.username}
+      res.send(result)
+    }).catch(function(e) {
+      res.send(e)
+    })
+  }
+
+exports.logout = function () {
+    
+}
+
+
+exports.register = function (req, res) {
+let user = new User(req.body)
+user.register()
+if (user.errors.length) {
+ res.send(user.errors)
+}else {
+ res.send("Congrats, there are no errors.")
+}
+}
+
+
+//with session help server gonna be able to remmeber user
+exports.home = function (req, res) {
+ if (req.session.user) {
+     res.send("Welcome to the actual! appliaction!")
+
+ }else {
+    res.render('home-guest')
+
+ }
+}
