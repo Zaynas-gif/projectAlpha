@@ -34,8 +34,9 @@ if (user.errors.length) {
 
 //with session help server gonna be able to remmeber user
 exports.home = function (req, res) {
+    //if everything is right its gonna display username when you login
  if (req.session.user) {
-     res.send("Welcome to the actual! appliaction!")
+    res.render('home-dashboard', {username: req.session.user.username})
 
  }else {
     res.render('home-guest')
