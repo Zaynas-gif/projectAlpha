@@ -33,6 +33,15 @@ let sessionOptions = session({
 
 app.use(sessionOptions)
 app.use(flash())
+//When we say app.use we telling express to run the function
+//for every request and we added that before router request so it means 
+//this will run before router and since we have next() it will move on to run
+//acctual relevent functions for particular route
+//and now we have users accsess property from every single on ejs template.
+app.use(function (req, res, next){
+ res.locals.user = req.session.user
+ next()
+})
 //Calling express
 //require function in node.js do 2 thinks one of them
 //executes file but it also
