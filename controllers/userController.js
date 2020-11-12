@@ -2,6 +2,15 @@ const { response } = require("express")
 // '../' you can move up your folder
 const User = require('../models/User')
 
+exports.mustBeLoggedIn = function(req, res, next) {
+    if (req.session.user) {
+        
+
+    }else {
+
+    }
+}
+
 
 //When user types in correct information username and password values 
 //1 server gonna store session data in memory
@@ -9,7 +18,7 @@ const User = require('../models/User')
 exports.login = function(req, res) {
     let user = new User(req.body)
     user.login().then(function(result) {
-      req.session.user = {favColor: "blue", username: user.data.username}
+        req.session.user = {avatar: user.avatar, username: user.data.username}
       req.session.save(function (){
           res.redirect('/')
       })
@@ -33,7 +42,7 @@ exports.logout = function (req, res) {
 exports.register = function (req, res) {
 let user = new User(req.body)
 user.register().then(() => {
-    req.session.user = {username: user.data.username}
+    req.session.user = {username: user.data.username, avatar: user.avatar}
     req.session.save(function () {
         res.redirect('/')
     })
@@ -51,10 +60,9 @@ user.register().then(() => {
 //with session help server gonna be able to remmeber user
 exports.home = function (req, res) {
     //if everything is right its gonna display username when you login
- if (req.session.user) {
-    res.render('home-dashboard', {username: req.session.user.username})
-
- }else {
-    res.render('home-guest', {errors: req.flash('errors'), regErrors: req.flash('regErrors')})
- }
-}
+    if (req.session.user) {
+        res.render('home-dashboard', {username: req.session.user.username, avatar: req.session.user.avatar})
+      } else {
+        res.render('home-guest', {errors: req.flash('errors'), regErrors: req.flash('regErrors')})
+      }
+    }
