@@ -13,10 +13,12 @@
 //module.exports = ... gonna store it in variable and
 // we gonna be able to use it that wheen ever we want.
 //npm install connect-mongo will help u store cookies in to database(mongodb)
+//flash will help us to add or remove data from session
 //Lets use express
 const express = require('express')
 const session = require('express-session')
 const MongoStore = require('connect-mongo')(session)
+const flash = require('connect-flash')
 const app = express()
 
 let sessionOptions = session({
@@ -30,6 +32,7 @@ let sessionOptions = session({
 
 
 app.use(sessionOptions)
+app.use(flash())
 //Calling express
 //require function in node.js do 2 thinks one of them
 //executes file but it also
