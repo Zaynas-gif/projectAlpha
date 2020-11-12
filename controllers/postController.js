@@ -11,6 +11,7 @@ exports.create = function(req, res) {
         res.send("new post created")
 
     }).catch(function () {
+        console.log
 
     })
 
