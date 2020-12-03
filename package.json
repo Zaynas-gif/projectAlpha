@@ -4,7 +4,7 @@
   "description": "",
   "main": "app.js",
   "engines": {
-    "node": "12.x"
+    "node": "14.15.1"
   },
   "scripts": {
     "watch": "start nodemon db --ignore frontend-js --ignore public/ && start webpack --watch",
