@@ -88,13 +88,15 @@ exports.logout = function(req, res) {
 
 //with session help server gonna be able to remmeber user
 //if everything is right its gonna display username when you login
-    exports.home = function (req, res) {
-    if (req.session.user) {
-        res.render('home-dashboard')
-      } else {
-        res.render('home-guest', {regErrors: req.flash('regErrors')})
-      }
-    }
+exports.home = async function(req, res) {
+  if (req.session.user) {
+    // fetch feed of posts for current user
+    let posts = await Post.getFeed(req.session.user._id)
+    res.render('home-dashboard', {posts: posts})
+  } else {
+    res.render('home-guest', {regErrors: req.flash('regErrors')})
+  }
+}
 
 
     exports.ifUserExists = function(req, res, next) {
