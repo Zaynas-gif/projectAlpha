@@ -65,6 +65,7 @@ app.use(function (req, res, next){
 //executes file but it also
 //returns what ever thet file exports
 const router = require('./router')
+const { sanitize } = require('dompurify')
 //Its just tells express to add users typed in data in our request object
 //so that we can accses later
 app.use(express.urlencoded({extended: false}))
@@ -78,5 +79,24 @@ app.set('view engine', 'ejs')
 app.use('/', router)
 
 
+const server = require('http').createServer(app)
+const io = require('socket.io')(server)
+io.use(function (socket, next){
+    sessionOptions(socket.request, socket.request.res, next )
+})
 
-module.exports = app
+io.on('connection', function (socket) {
+    if (socket.request.session.user) {
+        let user = socket.request.session.user
+        socket.emit('welcome', {username: user.username, avatar: user.avatar})
+
+
+
+        socket.on('chatMessageFromBrowser', function (data) {
+            socket.broadcast.emit('chatMessageFromServer', {message: sanitizeHTML(data.message, {allowedTags: [], allowedAttributes: {}}), username: user.username, avatar: user.avatar})
+        })
+    }
+})
+
+
+module.exports = server
